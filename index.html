@@ -159,3 +159,20 @@
   </script>
 </body>
 </html>
+<!-- Ikon Mode Admin -->
+<div style="position: fixed; top: 10px; right: 10px; cursor: pointer;" onclick="activateAdminMode()">
+  <img src="admin-icon.png" alt="Admin" width="20">
+</div>
+
+<script>
+  function activateAdminMode() {
+    const password = prompt("Masukkan kata sandi admin:");
+    if (password === "zahid201006") {
+      // Aktifkan mode admin
+      document.body.classList.add("admin-mode");
+      alert("Mode admin diaktifkan.");
+    } else {
+      alert("Kata sandi salah.");
+    }
+  }
+</script>
