@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TOPUP DIAMOND FF ROYYY</title>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -11,103 +11,35 @@
       background: linear-gradient(to right, #c2e9fb, #81a4fd);
     }
   </style>
-</head>
-<body class="text-gray-800" x-data="app()">
-
-  <div class="max-w-3xl mx-auto p-4">
-    <h1 class="text-3xl font-bold text-center text-blue-900 mb-6">TOPUP DIAMOND FF ROYYY</h1>
-
-    <!-- Admin Button -->
-    <div class="fixed top-4 right-4 cursor-pointer" @click="login">
-      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png" class="w-6 h-6" alt="Admin">
-    </div>
-
-    <!-- Diamond List -->
-    <div class="grid md:grid-cols-2 gap-4 mb-6">
-      <template x-for="item in diamondList" :key="item.id">
-        <div class="bg-white p-4 rounded-xl shadow border border-blue-300">
-          <div class="flex items-center space-x-4">
-            <img src="https://cdn-icons-png.flaticon.com/512/10541/10541798.png" class="w-12 h-12" alt="Diamond">
-            <template x-if="adminMode">
-              <div class="flex flex-col w-full">
-                <input type="text" x-model="item.jumlah" class="border p-1 rounded mb-1">
-                <input type="text" x-model="item.harga" class="border p-1 rounded">
-              </div>
-            </template>
-            <template x-if="!adminMode">
-              <label class="flex-1 cursor-pointer">
-                <input type="radio" x-model="selectedDiamond" :value="item.jumlah + ' - ' + item.harga" class="mr-2">
-                <div>
-                  <div class="text-blue-900 font-bold" x-text="item.jumlah"></div>
-                  <div class="text-sm text-gray-700" x-text="item.harga"></div>
-                </div>
-              </label>
-            </template>
-          </div>
-          <template x-if="adminMode">
-            <button @click="hapusDiamond(item.id)" class="mt-2 bg-red-500 text-white px-3 py-1 rounded text-sm">Hapus</button>
-          </template>
-        </div>
-      </template>
-    </div>
-
-    <!-- Admin Add Diamond -->
-    <div x-show="adminMode" class="bg-white p-4 rounded-xl shadow border border-green-300 mb-6">
-      <h2 class="text-lg font-bold text-green-700 mb-3">Tambah Diamond Baru</h2>
-      <input x-model="newDiamond.jumlah" type="text" placeholder="Contoh: 500 Diamond" class="p-2 border rounded w-full mb-2">
-      <input x-model="newDiamond.harga" type="text" placeholder="Contoh: Rp 65.000" class="p-2 border rounded w-full mb-3">
-      <button @click="tambahDiamond" class="bg-green-600 text-white px-4 py-2 rounded w-full mb-3">Tambah</button>
-      <div class="flex gap-2">
-        <button @click="simpanPerubahan" class="bg-blue-700 text-white w-full py-2 rounded">Simpan Perubahan</button>
-        <button @click="batalPerubahan" class="bg-gray-400 text-white w-full py-2 rounded">Kembali ke Pelanggan</button>
-      </div>
-    </div>
-
-    <!-- Form Pembelian -->
-    <div x-show="!adminMode" class="bg-white p-4 rounded-xl shadow border border-blue-400">
-      <h2 class="text-lg font-bold mb-3">Form Pembelian</h2>
-      <input x-model="selectedID" type="text" placeholder="Masukkan ID Free Fire" class="p-2 border rounded w-full mb-2">
-      <select x-model="selectedPayment" class="p-2 border rounded w-full mb-2">
-        <option>DANA</option>
-        <option>Pulsa</option>
-        <option>QRIS</option>
-      </select>
-      <a :href="buatPesanWA()" target="_blank">
-        <button class="bg-blue-600 text-white px-4 py-2 rounded w-full font-semibold">Beli via WhatsApp</button>
-      </a>
-    </div>
-  </div>
-
   <script>
     function app() {
       return {
         adminMode: false,
-        selectedID: '',
-        selectedPayment: 'DANA',
-        selectedDiamond: '',
-        newDiamond: { jumlah: '', harga: '' },
         diamondList: JSON.parse(localStorage.getItem('diamondList')) || [
           { id: 1, jumlah: '70 Diamond', harga: 'Rp 10.000' },
           { id: 2, jumlah: '140 Diamond', harga: 'Rp 18.000' },
           { id: 3, jumlah: '355 Diamond', harga: 'Rp 45.000' },
         ],
-
+        newDiamond: { jumlah: '', harga: '' },
+        selectedID: '',
+        selectedPayment: 'DANA',
+        selectedDiamond: '',
         login() {
           const pass = prompt("Masukkan kata sandi admin:");
           if (pass === 'zahid201006') {
             this.adminMode = true;
             this.originalList = JSON.parse(JSON.stringify(this.diamondList));
           } else {
-            alert('Kata sandi salah!');
+            alert('Kata sandi salah');
           }
         },
         tambahDiamond() {
           if (this.newDiamond.jumlah.trim() && this.newDiamond.harga.trim()) {
             const newId = Date.now();
-            this.diamondList.push({ id: newId, ...this.newDiamond });
+            this.diamondList.push({ id: newId, jumlah: this.newDiamond.jumlah, harga: this.newDiamond.harga });
             this.newDiamond = { jumlah: '', harga: '' };
           } else {
-            alert("Isi jumlah dan harga terlebih dahulu.");
+            alert('Mohon isi semua kolom.');
           }
         },
         hapusDiamond(id) {
@@ -115,7 +47,7 @@
         },
         simpanPerubahan() {
           localStorage.setItem('diamondList', JSON.stringify(this.diamondList));
-          alert('Perubahan disimpan!');
+          alert('Perubahan berhasil disimpan.');
         },
         batalPerubahan() {
           this.diamondList = JSON.parse(localStorage.getItem('diamondList')) || [];
@@ -123,13 +55,78 @@
         },
         buatPesanWA() {
           if (!this.selectedID || !this.selectedDiamond) {
-            alert("Isi ID dan pilih diamond!");
+            alert('Harap isi ID dan pilih jumlah Diamond.');
             return '';
           }
           return https://wa.me/6282278960050?text=Jumlah Diamond: ${this.selectedDiamond}%0AHallo Admin Royyy ID: ${this.selectedID}%0AVia pembayaran: ${this.selectedPayment};
         }
-      }
+      };
     }
   </script>
+</head>
+<body class="relative min-h-screen text-gray-800" x-data="app()">
+  <div class="max-w-3xl mx-auto p-4">
+    <h1 class="text-3xl font-extrabold text-center text-blue-900 mb-8">TOPUP DIAMOND FF ROYYY</h1>
+
+    <!-- Tombol Admin -->
+    <div class="fixed top-4 right-4 z-50 cursor-pointer" @click="login">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png" alt="Admin" class="w-6 h-6">
+    </div>
+
+    <!-- Daftar Diamond -->
+    <div class="grid md:grid-cols-2 gap-4 mb-6">
+      <template x-for="(item, index) in diamondList" :key="item.id">
+        <div class="bg-white p-4 rounded-2xl shadow-lg border border-blue-200">
+          <div class="flex items-center space-x-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/10541/10541798.png" alt="Diamond" class="w-12 h-12">
+            <template x-if="adminMode">
+              <div class="flex flex-col w-full">
+                <input type="text" x-model="item.jumlah" class="border p-1 rounded w-full mb-1">
+                <input type="text" x-model="item.harga" class="border p-1 rounded w-full">
+              </div>
+            </template>
+            <template x-if="!adminMode">
+              <label class="flex-1 cursor-pointer">
+                <input type="radio" x-model="selectedDiamond" :value="item.jumlah + ' - ' + item.harga" class="mr-2">
+                <div>
+                  <div class="text-blue-900 font-bold text-lg" x-text="item.jumlah"></div>
+                  <div class="text-sm text-gray-700" x-text="item.harga"></div>
+                </div>
+              </label>
+            </template>
+          </div>
+          <template x-if="adminMode">
+            <button @click="hapusDiamond(item.id)" class="mt-3 bg-red-500 text-white px-3 py-1 rounded text-sm">Hapus</button>
+          </template>
+        </div>
+      </template>
+    </div>
+
+    <!-- Form Admin -->
+    <div x-show="adminMode" class="bg-white p-4 rounded-xl shadow-lg mb-6 border border-green-300">
+      <h2 class="text-xl font-semibold mb-3 text-green-700">Tambah Diamond Baru</h2>
+      <input x-model="newDiamond.jumlah" type="text" placeholder="Contoh: 500 Diamond" class="p-2 border rounded w-full mb-2">
+      <input x-model="newDiamond.harga" type="text" placeholder="Contoh: Rp 65.000" class="p-2 border rounded w-full mb-3">
+      <button @click="tambahDiamond" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700 mb-3">Tambah</button>
+      <div class="flex space-x-2">
+        <button @click="simpanPerubahan" class="bg-blue-700 text-white px-4 py-2 rounded w-full hover:bg-blue-800">Simpan Perubahan</button>
+        <button @click="batalPerubahan" class="bg-gray-400 text-white px-4 py-2 rounded w-full hover:bg-gray-500">Kembali ke Pelanggan</button>
+      </div>
+    </div>
+
+    <!-- Form Pelanggan -->
+    <div x-show="!adminMode" class="bg-white p-4 rounded-xl shadow-lg border border-blue-300">
+      <h2 class="text-lg font-bold mb-2">Isi Form Pembelian</h2>
+      <input x-model="selectedID" type="text" placeholder="Masukkan ID Free Fire" class="p-2 border rounded w-full mb-2">
+      <select x-model="selectedPayment" class="p-2 border rounded w-full mb-2">
+        <option>DANA</option>
+        <option>Pulsa</option>
+        <option>QRIS</option>
+      </select>
+      <a :href="buatPesanWA()" target="_blank">
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full font-semibold">Beli via WhatsApp</button>
+      </a>
+    </div>
+  </div>
 </body>
 </html>
