@@ -176,3 +176,13 @@
     }
   }
 </script>
+<div class="bg-white p-4 rounded shadow mb-2">
+  <input type="text" x-model="item.jumlah" class="border p-1 rounded w-full mb-1" />
+  <input type="text" x-model="item.harga" class="border p-1 rounded w-full mb-1" />
+  <button class="bg-red-500 text-white px-2 py-1 rounded" @click="hapusDiamond(item.id)">Hapus</button>
+</div>
+<div class="bg-white p-4 rounded shadow mb-4">
+  <input type="text" placeholder="Contoh: 500 Diamond" x-model="newDiamond.jumlah" class="border p-2 rounded w-full mb-2">
+  <input type="text" placeholder="Contoh: Rp 65.000" x-model="newDiamond.harga" class="border p-2 rounded w-full mb-2">
+  <button @click="tambahDiamond" class="bg-green-600 text-white px-4 py-2 rounded w-full">Tambah</button>
+</div>
