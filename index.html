@@ -8,6 +8,7 @@
     function app() {
       return {
         adminMode: false,
+        originalList: [],
         diamondList: [
           { id: 1, jumlah: '70 Diamond', harga: 'Rp 10.000' },
           { id: 2, jumlah: '140 Diamond', harga: 'Rp 18.000' },
@@ -18,13 +19,14 @@
           const pass = prompt("Masukkan kata sandi admin:");
           if (pass === 'zahid201006') {
             this.adminMode = true;
+            this.originalList = JSON.parse(JSON.stringify(this.diamondList));
           } else {
             alert('Kata sandi salah');
           }
         },
         tambahDiamond() {
           if (this.newDiamond.jumlah.trim() && this.newDiamond.harga.trim()) {
-            const newId = this.diamondList.length ? this.diamondList[this.diamondList.length - 1].id + 1 : 1;
+            const newId = Date.now();
             this.diamondList.push({ id: newId, jumlah: this.newDiamond.jumlah, harga: this.newDiamond.harga });
             this.newDiamond = { jumlah: '', harga: '' };
           } else {
@@ -33,6 +35,14 @@
         },
         hapusDiamond(id) {
           this.diamondList = this.diamondList.filter(item => item.id !== id);
+        },
+        simpanPerubahan() {
+          alert('Perubahan berhasil disimpan (hanya sementara di sesi ini).');
+          this.originalList = JSON.parse(JSON.stringify(this.diamondList));
+        },
+        batalPerubahan() {
+          this.diamondList = JSON.parse(JSON.stringify(this.originalList));
+          this.adminMode = false;
         }
       };
     }
@@ -56,7 +66,7 @@
   <template x-for="(item, index) in diamondList" :key="item.id">
     <div class="bg-white p-4 rounded-2xl shadow-lg border border-blue-200">
       <div class="flex items-center space-x-4">
-        <img src="https://cdn-icons-png.flaticon.com/512/2989/2989989.png" alt="Diamond" class="w-12 h-12">
+        <img src="https://cdn-icons-png.flaticon.com/512/10541/10541798.png" alt="Diamond" class="w-12 h-12">
         <template x-if="adminMode">
           <div class="flex flex-col w-full">
             <input type="text" x-model="item.jumlah" class="border p-1 rounded w-full mb-1">
@@ -82,11 +92,15 @@
   <h2 class="text-xl font-semibold mb-3 text-green-700">Tambah Diamond Baru</h2>
   <input x-model="newDiamond.jumlah" type="text" placeholder="Contoh: 500 Diamond" class="p-2 border rounded w-full mb-2">
   <input x-model="newDiamond.harga" type="text" placeholder="Contoh: Rp 65.000" class="p-2 border rounded w-full mb-3">
-  <button @click="tambahDiamond" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">Tambah</button>
+  <button @click="tambahDiamond" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700 mb-3">Tambah</button>
+  <div class="flex space-x-2">
+    <button @click="simpanPerubahan" class="bg-blue-700 text-white px-4 py-2 rounded w-full hover:bg-blue-800">Simpan Perubahan</button>
+    <button @click="batalPerubahan" class="bg-gray-400 text-white px-4 py-2 rounded w-full hover:bg-gray-500">Kembali ke Pelanggan</button>
+  </div>
 </div>
 
 <!-- Form Pembelian (Pelanggan) -->
-<div class="bg-white p-4 rounded-xl shadow-lg border border-blue-300">
+<div x-show="!adminMode" class="bg-white p-4 rounded-xl shadow-lg border border-blue-300">
   <h2 class="text-lg font-bold mb-2">Isi Form Pembelian</h2>
   <input type="text" placeholder="Masukkan ID Free Fire" class="p-2 border rounded w-full mb-2">
   <select class="p-2 border rounded w-full mb-2">
