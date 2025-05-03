@@ -8,44 +8,53 @@
     function app() {
       return {
         adminMode: false,
-        originalList: [],
-        diamondList: [
+        diamondList: JSON.parse(localStorage.getItem('diamondList')) || [
           { id: 1, jumlah: '70 Diamond', harga: 'Rp 10.000' },
           { id: 2, jumlah: '140 Diamond', harga: 'Rp 18.000' },
           { id: 3, jumlah: '355 Diamond', harga: 'Rp 45.000' },
         ],
         newDiamond: { jumlah: '', harga: '' },
-        login() {
-          const pass = prompt("Masukkan kata sandi admin:");
-          if (pass === 'zahid201006') {
-            this.adminMode = true;
-            this.originalList = JSON.parse(JSON.stringify(this.diamondList));
-          } else {
-            alert('Kata sandi salah');
-          }
-        },
-        tambahDiamond() {
-          if (this.newDiamond.jumlah.trim() && this.newDiamond.harga.trim()) {
-            const newId = Date.now();
-            this.diamondList.push({ id: newId, jumlah: this.newDiamond.jumlah, harga: this.newDiamond.harga });
-            this.newDiamond = { jumlah: '', harga: '' };
-          } else {
-            alert('Mohon isi semua kolom.');
-          }
-        },
-        hapusDiamond(id) {
-          this.diamondList = this.diamondList.filter(item => item.id !== id);
-        },
-        simpanPerubahan() {
-          alert('Perubahan berhasil disimpan (hanya sementara di sesi ini).');
-          this.originalList = JSON.parse(JSON.stringify(this.diamondList));
-        },
-        batalPerubahan() {
-          this.diamondList = JSON.parse(JSON.stringify(this.originalList));
-          this.adminMode = false;
-        }
-      };
+        selectedID: '',
+        selectedPayment: 'DANA',
+        selectedDiamond: '',login() {
+      const pass = prompt("Masukkan kata sandi admin:");
+      if (pass === 'zahid201006') {
+        this.adminMode = true;
+        this.originalList = JSON.parse(JSON.stringify(this.diamondList));
+      } else {
+        alert('Kata sandi salah');
+      }
+    },
+    tambahDiamond() {
+      if (this.newDiamond.jumlah.trim() && this.newDiamond.harga.trim()) {
+        const newId = Date.now();
+        this.diamondList.push({ id: newId, jumlah: this.newDiamond.jumlah, harga: this.newDiamond.harga });
+        this.newDiamond = { jumlah: '', harga: '' };
+      } else {
+        alert('Mohon isi semua kolom.');
+      }
+    },
+    hapusDiamond(id) {
+      this.diamondList = this.diamondList.filter(item => item.id !== id);
+    },
+    simpanPerubahan() {
+      localStorage.setItem('diamondList', JSON.stringify(this.diamondList));
+      alert('Perubahan berhasil disimpan.');
+    },
+    batalPerubahan() {
+      this.diamondList = JSON.parse(localStorage.getItem('diamondList')) || [];
+      this.adminMode = false;
+    },
+    buatPesanWA() {
+      if (!this.selectedID || !this.selectedDiamond) {
+        alert('Harap isi ID dan pilih jumlah Diamond.');
+        return '';
+      }
+      return https://wa.me/6282278960050?text=Jumlah Diamond: ${this.selectedDiamond}%0AHallo Admin Royyy ID: ${this.selectedID}%0AVia pembayaran: ${this.selectedPayment};
     }
+  };
+}
+
   </script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
@@ -74,10 +83,13 @@
           </div>
         </template>
         <template x-if="!adminMode">
-          <div>
-            <div class="text-blue-900 font-bold text-lg" x-text="item.jumlah"></div>
-            <div class="text-sm text-gray-700" x-text="item.harga"></div>
-          </div>
+          <label class="flex-1 cursor-pointer">
+            <input type="radio" x-model="selectedDiamond" :value="item.jumlah + ' - ' + item.harga" class="mr-2">
+            <div>
+              <div class="text-blue-900 font-bold text-lg" x-text="item.jumlah"></div>
+              <div class="text-sm text-gray-700" x-text="item.harga"></div>
+            </div>
+          </label>
         </template>
       </div>
       <template x-if="adminMode">
@@ -102,13 +114,13 @@
 <!-- Form Pembelian (Pelanggan) -->
 <div x-show="!adminMode" class="bg-white p-4 rounded-xl shadow-lg border border-blue-300">
   <h2 class="text-lg font-bold mb-2">Isi Form Pembelian</h2>
-  <input type="text" placeholder="Masukkan ID Free Fire" class="p-2 border rounded w-full mb-2">
-  <select class="p-2 border rounded w-full mb-2">
+  <input x-model="selectedID" type="text" placeholder="Masukkan ID Free Fire" class="p-2 border rounded w-full mb-2">
+  <select x-model="selectedPayment" class="p-2 border rounded w-full mb-2">
     <option>DANA</option>
     <option>Pulsa</option>
     <option>QRIS</option>
   </select>
-  <a href="https://wa.me/6282278960050" target="_blank">
+  <a :href="buatPesanWA()" target="_blank">
     <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full font-semibold">Beli via WhatsApp</button>
   </a>
 </div>
