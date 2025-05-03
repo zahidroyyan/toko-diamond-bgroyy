@@ -1,188 +1,96 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DIAMOND BG ROYYY</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #e6f0ff;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: auto;
-    }
-
-    h1 {
-      text-align: center;
-      color: #004080;
-      margin-bottom: 5px;
-    }
-
-    h2.subjudul {
-      text-align: center;
-      color: #3366cc;
-      font-weight: normal;
-      margin-bottom: 20px;
-    }
-
-    .form-id {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .form-id input {
-      padding: 10px;
-      width: 80%;
-      max-width: 400px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .paket {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      margin: 20px 0;
-      overflow: hidden;
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .paket img {
-      width: 150px;
-      height: auto;
-      object-fit: cover;
-    }
-
-    .paket-info {
-      padding: 20px;
-      flex: 1;
-    }
-
-    .paket-info h3 {
-      margin: 0 0 10px;
-      color: #003366;
-    }
-
-    .paket-info p {
-      margin: 5px 0;
-    }
-
-    .btn-wa {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 15px;
-      background-color: #25d366;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .btn-wa:hover {
-      background-color: #1ebc59;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>DIAMOND BG ROYYY</h1>
-    <h2 class="subjudul">Diamond Free Fire</h2>
-
-    <div class="form-id">
-      <input type="text" id="playerId" placeholder="Masukkan ID Free Fire kamu..." />
-    </div>
-
-    <!-- Paket Diamond -->
-    <div class="paket">
-      <img src="https://cdn-icons-png.flaticon.com/512/1162/1162499.png" alt="70 Diamond" />
-      <div class="paket-info">
-        <h3>70 Diamond</h3>
-        <p>Harga: Rp10.000</p>
-        <a class="btn-wa" onclick="order(70)">Order via WhatsApp</a>
-      </div>
-    </div>
-
-    <div class="paket">
-      <img src="https://cdn-icons-png.flaticon.com/512/1162/1162499.png" alt="140 Diamond" />
-      <div class="paket-info">
-        <h3>140 Diamond</h3>
-        <p>Harga: Rp19.000</p>
-        <a class="btn-wa" onclick="order(140)">Order via WhatsApp</a>
-      </div>
-    </div>
-
-    <div class="paket">
-      <img src="https://cdn-icons-png.flaticon.com/512/1162/1162499.png" alt="355 Diamond" />
-      <div class="paket-info">
-        <h3>355 Diamond</h3>
-        <p>Harga: Rp49.000</p>
-        <a class="btn-wa" onclick="order(355)">Order via WhatsApp</a>
-      </div>
-    </div>
-
-    <div class="paket">
-      <img src="https://cdn-icons-png.flaticon.com/512/1162/1162499.png" alt="720 Diamond" />
-      <div class="paket-info">
-        <h3>720 Diamond</h3>
-        <p>Harga: Rp95.000</p>
-        <a class="btn-wa" onclick="order(720)">Order via WhatsApp</a>
-      </div>
-    </div>
-
-    <div class="paket">
-      <img src="https://cdn-icons-png.flaticon.com/512/1162/1162499.png" alt="1000 Diamond" />
-      <div class="paket-info">
-        <h3>1000 Diamond</h3>
-        <p>Harga: Rp130.000</p>
-        <a class="btn-wa" onclick="order(1000)">Order via WhatsApp</a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function order(diamond) {
-      const id = document.getElementById("playerId").value.trim();
-      if (!id) {
-        alert("Silakan masukkan ID Free Fire kamu terlebih dahulu.");
-        return;
-      }
-      const nomor = "6282278960050";
-      const pesan = `Halo admin, saya ingin beli ${diamond} Diamond Free Fire. ID: ${id}`;
-      const url = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
-      window.open(url, "_blank");
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOPUP DIAMOND FF ROYYY</title>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer>
+    function app() {
+      return {
+        adminMode: false,
+        password: '',
+        diamondList: [
+          { id: 1, jumlah: '70 Diamond', harga: 'Rp 10.000' },
+          { id: 2, jumlah: '140 Diamond', harga: 'Rp 18.000' },
+          { id: 3, jumlah: '355 Diamond', harga: 'Rp 45.000' },
+        ],
+        newDiamond: { jumlah: '', harga: '' },
+        login() {
+          const pass = prompt("Masukkan kata sandi admin:");
+          if (pass === 'zahid201006') {
+            this.adminMode = true;
+          } else {
+            alert('Kata sandi salah');
+          }
+        },
+        tambahDiamond() {
+          const newId = Date.now();
+          this.diamondList.push({ id: newId, ...this.newDiamond });
+          this.newDiamond = { jumlah: '', harga: '' };
+        },
+        hapusDiamond(id) {
+          this.diamondList = this.diamondList.filter(item => item.id !== id);
+        }
+      };
     }
   </script>
-</body>
-</html>
-<!-- Ikon Mode Admin -->
-<div style="position: fixed; top: 10px; right: 10px; cursor: pointer;" onclick="activateAdminMode()">
-  <img src="admin-icon.png" alt="Admin" width="20">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-blue-100 relative" x-data="app()">
+  <div class="max-w-3xl mx-auto p-4">
+    <h1 class="text-2xl font-bold text-center text-blue-900 mb-6">TOPUP DIAMOND FF ROYYY</h1><!-- Ikon Admin Kecil di Pojok Kanan -->
+<div class="fixed top-4 right-4 z-50 cursor-pointer" @click="login">
+  <img src="https://cdn-icons-png.flaticon.com/512/1828/1828490.png" alt="Admin" class="w-6 h-6">
 </div>
 
-<script>
-  function activateAdminMode() {
-    const password = prompt("Masukkan kata sandi admin:");
-    if (password === "zahid201006") {
-      // Aktifkan mode admin
-      document.body.classList.add("admin-mode");
-      alert("Mode admin diaktifkan.");
-    } else {
-      alert("Kata sandi salah.");
-    }
-  }
-</script>
-<div class="bg-white p-4 rounded shadow mb-2">
-  <input type="text" x-model="item.jumlah" class="border p-1 rounded w-full mb-1" />
-  <input type="text" x-model="item.harga" class="border p-1 rounded w-full mb-1" />
-  <button class="bg-red-500 text-white px-2 py-1 rounded" @click="hapusDiamond(item.id)">Hapus</button>
+<!-- Daftar Diamond -->
+<div class="grid gap-4 mb-6">
+  <template x-for="(item, index) in diamondList" :key="item.id">
+    <div class="bg-white p-4 rounded shadow">
+      <div class="flex items-center space-x-2">
+        <img src="https://cdn-icons-png.flaticon.com/512/2989/2989989.png" alt="Diamond" class="w-10 h-10">
+        <template x-if="adminMode">
+          <div class="flex flex-col w-full">
+            <input type="text" x-model="item.jumlah" class="border p-1 rounded w-full mb-1">
+            <input type="text" x-model="item.harga" class="border p-1 rounded w-full">
+          </div>
+        </template>
+        <template x-if="!adminMode">
+          <div>
+            <div class="text-blue-900 font-semibold" x-text="item.jumlah"></div>
+            <div class="text-sm text-gray-600" x-text="item.harga"></div>
+          </div>
+        </template>
+      </div>
+      <template x-if="adminMode">
+        <button @click="hapusDiamond(item.id)" class="mt-2 bg-red-500 text-white px-2 py-1 rounded text-sm">Hapus</button>
+      </template>
+    </div>
+  </template>
 </div>
-<div class="bg-white p-4 rounded shadow mb-4">
-  <input type="text" placeholder="Contoh: 500 Diamond" x-model="newDiamond.jumlah" class="border p-2 rounded w-full mb-2">
-  <input type="text" placeholder="Contoh: Rp 65.000" x-model="newDiamond.harga" class="border p-2 rounded w-full mb-2">
+
+<!-- Form Tambah Diamond (Admin) -->
+<div x-show="adminMode" class="bg-white p-4 rounded shadow mb-6">
+  <h2 class="text-lg font-bold mb-2">Tambah Diamond Baru</h2>
+  <input x-model="newDiamond.jumlah" type="text" placeholder="Contoh: 500 Diamond" class="p-2 border rounded w-full mb-2">
+  <input x-model="newDiamond.harga" type="text" placeholder="Contoh: Rp 65.000" class="p-2 border rounded w-full mb-2">
   <button @click="tambahDiamond" class="bg-green-600 text-white px-4 py-2 rounded w-full">Tambah</button>
 </div>
+
+<!-- Form Pembelian (Pelanggan) -->
+<div class="bg-white p-4 rounded shadow">
+  <h2 class="text-lg font-bold mb-2">Isi Form Pembelian</h2>
+  <input type="text" placeholder="Masukkan ID Free Fire" class="p-2 border rounded w-full mb-2">
+  <select class="p-2 border rounded w-full mb-2">
+    <option>DANA</option>
+    <option>Pulsa</option>
+    <option>QRIS</option>
+  </select>
+  <a href="https://wa.me/6281234567890" target="_blank">
+    <button class="bg-blue-600 text-white px-4 py-2 rounded w-full">Beli via WhatsApp</button>
+  </a>
+</div>
+
+  </div>
+</body>
+</html>
